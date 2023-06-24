@@ -6,11 +6,31 @@
         xmlns:local="clr-namespace:WpfMultithreading.App"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <DataGrid ItemsSource="{Binding OutputEntries}" DataContext="{Binding Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWindow}}}">
-        <!--<DataGrid.Columns>
-            <DataGridTextColumn Header="Timestamp"/>
-            <DataGridTextColumn Header="Message" />
-            <DataGridTextColumn Header="ThreadLabel" />
-        </DataGrid.Columns>-->
-    </DataGrid>
+    <DockPanel>
+        <Menu DockPanel.Dock="Top" IsMainMenu="True">
+            <MenuItem Header="_Timer">
+                <MenuItem Header="_Toggle" />
+            </MenuItem>
+            <MenuItem Header="_File">
+                <MenuItem Header="_New" />
+                <MenuItem Header="_Open" />
+                <MenuItem Header="_Save" />
+                <Separator />
+                <MenuItem Header="_Exit" />
+            </MenuItem>
+        </Menu>
+        <DataGrid
+            ItemsSource="{Binding OutputEntries}"
+            DataContext="{Binding Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:MainWindow}}}"
+            AutoGenerateColumns="False"
+            HorizontalGridLinesBrush="#FFEEEEEE"
+            VerticalGridLinesBrush="#FFEEEEEE"
+        >
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Timestamp" Binding="{Binding Timestamp}" />
+                <DataGridTextColumn Header="Thread" Binding="{Binding ThreadLabel}" />
+                <DataGridTextColumn Header="Message" Binding="{Binding Message}" />
+            </DataGrid.Columns>
+        </DataGrid>
+    </DockPanel>
 </Window>

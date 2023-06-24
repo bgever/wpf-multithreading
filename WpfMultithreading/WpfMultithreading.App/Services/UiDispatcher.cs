@@ -24,7 +24,7 @@ namespace WpfMultithreading.App.Services
 
         public static void Register(Dispatcher dispatcher)
         {
-            if(instance != null) throw new InvalidOperationException("Instance already registered.");
+            if (instance != null) throw new InvalidOperationException("Instance already registered.");
             instance = new(dispatcher);
         }
 
@@ -35,11 +35,26 @@ namespace WpfMultithreading.App.Services
             this.dispatcher = dispatcher;
         }
 
-        public bool IsUiThread => this.dispatcher.Thread == Thread.CurrentThread;
+        public bool IsUiThread => dispatcher.Thread == Thread.CurrentThread;
 
-        public void Invoke(Action action)
+        public void BeginInvoke(Action action)
         {
-            dispatcher.BeginInvoke(action);
+            if (IsUiThread) action(); else dispatcher.BeginInvoke(action);
+        }
+
+        public async Task InvokeAsync(Func<Task> action)
+        {
+            if (IsUiThread)
+            {
+                await action();
+                return;
+            }
+            await await dispatcher.InvokeAsync(action);
+        }
+
+        public async Task<TResult> InvokeAsync<TResult>(Func<Task<TResult>> action)
+        {
+            return IsUiThread ? await action() : await await dispatcher.InvokeAsync(action);
         }
     }
 }

@@ -36,7 +36,7 @@ namespace WpfMultithreading.App
 
         private void OutputReaderTimer_Elapsed(object? sender, ElapsedEventArgs e)
         {
-            UiDispatcher.Instance.Invoke(() =>
+            UiDispatcher.Instance.BeginInvoke(() =>
             {
                 while (OutputStore.Queue.TryDequeue(out var entry)) OutputEntries.Add(entry);
             });
